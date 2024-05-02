@@ -13,9 +13,7 @@ const projectRoot = path.resolve(__dirname, "../");
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 
-
-const usedIDMap = {};
-
+const usedIDMap: Record<string, boolean> = {};
 
 async function findSketchFiles(
     dir: string,
@@ -43,7 +41,6 @@ async function findSketchFiles(
     }
 
     for (const file of files) {
-       
         const filePath = path.join(dir, file);
         const fileStats = await stat(filePath);
 
@@ -58,29 +55,29 @@ async function findSketchFiles(
                 filePath
             );
 
-           
-            const fullRoute = path.join(baseRoute, curSketchFile);
+            // typecast to string to avoid TS error
+            const fullRoute = path.join(baseRoute, curSketchFile as string);
 
             const relativeRouteArr = path
                 .relative(projectRoot, fullRoute)
                 .split(path.sep);
-            
+
             const id = relativeRouteArr[0];
             if (usedIDMap[id]) {
                 throw new Error(`Duplicate Sketch found: ${id}`);
             }
             usedIDMap[id] = true;
-            
+
             // insert `src/sketches` into the route
             relativeRouteArr.unshift("sketches");
             relativeRouteArr.unshift(baseURL);
             const route = relativeRouteArr.join(path.sep);
-            
+
             relativeRouteArr.pop();
             relativeRouteArr.push("cover.png");
             const imageUrl = relativeRouteArr.join(path.sep);
 
-             // spread the metaData AFTER to override for custom keys
+            // spread the metaData AFTER to override for custom keys
             sketches.push({
                 id,
                 route,
@@ -97,12 +94,19 @@ async function main() {
     const sketchesDirectory = path.join(__dirname, "../sketches");
 
     const projectBaseURL = "src";
-    const sketches = await findSketchFiles(sketchesDirectory, undefined, projectBaseURL);
+    const sketches = await findSketchFiles(
+        sketchesDirectory,
+        undefined,
+        projectBaseURL
+    );
 
-    const sketchModules = sketches.reduce((acc, sketch) => {
-        acc[sketch.id] = sketch.route.replace(projectBaseURL, ".");
-        return acc;
-    }, {});
+    const sketchModules = sketches.reduce<Record<string, string>>(
+        (acc, sketch) => {
+            acc[sketch.id] = sketch.route.replace(projectBaseURL, ".");
+            return acc;
+        },
+        {}
+    );
 
     logger.info(`Found ${sketches.length} sketches`);
     for (const sketch of sketches) {
@@ -115,7 +119,11 @@ async function main() {
 
 export const sketches: Sketch[] = ${JSON.stringify(sketches, null, 4)};
 
-export const sketchModules: Record <string, string> = ${JSON.stringify(sketchModules, null, 4)};
+export const sketchModules: Record <string, string> = ${JSON.stringify(
+        sketchModules,
+        null,
+        4
+    )};
 `;
 
     fs.writeFileSync(indexFilePath, content, "utf-8");
