@@ -1,11 +1,12 @@
-import React, { lazy } from "react";
+import React from "react";
 import { Sidebar } from "./ui/Sidebar";
 import { Viewport } from "./ui/Viewport";
 import { Suspense } from "react";
-import { sketches, sketchModules } from "./sketches";
+import { getSketches } from "./sketches";
 import { SketchLoading } from "./ui/SketchLoading";
 import { SketchError } from "./ui/SketchError";
 import { SketchSearcherProvider } from "./common/context";
+import { Sketch } from "./common/types";
 
 type ErrorBoundaryProps = {
     children: React.ReactNode;
@@ -45,12 +46,15 @@ class ErrorBoundary extends React.Component<
 }
 
 function App() {
-    const firstSketch = sketches[0];
-    const key = firstSketch.id;
+    const [sketches, setSketches] = React.useState<Sketch[]>([]);
 
-    const SketchComponent = lazy(
-        () => import(/* @vite-ignore */ sketchModules[key])
-    );
+    getSketches().then(sketches => {
+        setSketches(sketches);
+        return sketches;
+    });
+
+    const SketchComponent = sketches[0] ? sketches[0].Component : () => null;
+    
 
     return (
         <div className="flex h-full">
@@ -60,7 +64,7 @@ function App() {
             <Viewport>
                 <ErrorBoundary fallback={<SketchError />}>
                     <Suspense fallback={<SketchLoading />}>
-                        <SketchComponent />
+                         <SketchComponent />
                     </Suspense>
                 </ErrorBoundary>
             </Viewport>

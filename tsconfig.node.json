@@ -9,7 +9,6 @@
 
     "include": [
         "vite.config.ts",
-        "./src/scripts/**/*.ts",
-        "./src/common/types.ts",
+        "./scripts/**/*.ts", "src/common/logger.ts",
     ]
 }

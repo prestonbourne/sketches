@@ -1,6 +1,8 @@
+import React from 'react';
+
 export type Sketch = {
     id: string;
-    route: string;
+    Component: ReturnType<typeof React.lazy>;
 } & SketchMetaData;
 
 export type SketchMetaData = {

@@ -27,5 +27,6 @@ export default defineConfig({
         alias: {
             src: "/src",
         },
-    }
+    },
+    base: "./",
 });
