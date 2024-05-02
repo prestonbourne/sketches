@@ -27,8 +27,5 @@ export default defineConfig({
         alias: {
             src: "/src",
         },
-    },
-    build: {
-        outDir: "dist",
-    },
+    }
 });
