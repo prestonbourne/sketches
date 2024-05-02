@@ -3,7 +3,7 @@ import path from "path";
 import { promisify } from "util";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import type { Sketch, SketchMetaData } from "../common/types";
+import type { Sketch, SketchMetaData } from "../src/common/types";
 import { logger } from "./logger";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -91,7 +91,7 @@ async function findSketchFiles(
 }
 
 async function main() {
-    const sketchesDirectory = path.join(__dirname, "../sketches");
+    const sketchesDirectory = path.join(__dirname, "../src/sketches");
 
     const projectBaseURL = "src";
     const sketches = await findSketchFiles(

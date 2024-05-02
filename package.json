@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prebuild": "pnpm tsx ./src/scripts/create-sketches.ts",
+    "prebuild": "pnpm tsx ./scripts/create-sketches.ts",
     "dev": "pnpm prebuild && vite",
     "build": "pnpm prebuild && tsc -b && vite build --emptyOutDir",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

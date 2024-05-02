@@ -6,6 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types", "src/types"],
+    "declaration": false,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -23,14 +24,10 @@
 
     /* Paths */
     "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    }
+
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist", "src/scripts"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "buildOptions": {
-    "outDir": "dist"
-  }
+
 }
