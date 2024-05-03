@@ -87,9 +87,8 @@ type SketchItemProps = {
 };
 
 const Item: React.FC<SketchItemProps> = ({ sketch }) => {
-    const imageUrl = sketch.imageUrl
-        ? `/${sketch.imageUrl}?w=1000&format=webp`
-        : `https://source.unsplash.com/1000x1000/?abstract`;
+   
+    const imageUrl = new URL(`../sketches/${sketch.id}/cover.png`, import.meta.url).href;
 
     return (
         <li className="group relative h-64 block rounded-lg border-solid border-slate-400 border-2 overflow-hidden hover:border-purple-400 transition-all text-slate-100 hover:cursor-pointer">
