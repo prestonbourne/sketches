@@ -48,11 +48,9 @@ class ErrorBoundary extends React.Component<
 function App() {
     const [sketches, setSketches] = React.useState<Sketch[]>([]);
 
-    getSketches().then(sketches => {
-        setSketches(sketches);
-        return sketches;
-    });
-
+    React.useEffect(() => {
+        getSketches().then(setSketches);
+    }, []); // Fetch sketches on mount
     const SketchComponent = sketches[0] ? sketches[0].Component : () => null;
     
 
